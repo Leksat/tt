@@ -31,10 +31,11 @@ class TT:
             'start': gtk.MenuItem("Start"),
             'pause': gtk.MenuItem("Pause"),
             'edit': gtk.MenuItem("Edit"),
-            'clear': gtk.MenuItem("Clear"),
+            'clear_stop': gtk.MenuItem("Clear & Stop"),
+            'clear': gtk.MenuItem("Clear & Continue"),
             'quit': gtk.MenuItem("Quit"),
         }
-        keys = ['start', 'pause', 'edit', 'clear', 'quit']  # To get right order.
+        keys = ['start', 'pause', 'edit', 'clear_stop', 'clear', 'quit']  # To get right order.
 
         for key in keys:
             self.menu_items[key].connect("activate", getattr(self, 'menu_' + key))
@@ -69,6 +70,13 @@ class TT:
         self.update_label()
 
     def menu_clear(self, widget):
+        self.start_time = time.time()
+        self.update_label()
+
+    def menu_clear_stop(self, widget):
+        gtk.timeout_remove(self.timer_id)
+        self.menu_items['pause'].set_sensitive(False)
+        self.menu_items['start'].set_sensitive(True)
         self.start_time = time.time()
         self.update_label()
 
